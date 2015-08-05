@@ -223,7 +223,13 @@
 <script src="js/bootstrap-datepicker.ru.js"></script>
 <script>
     $(function() {
-        $('div.form-group.datepicker input').datepicker({});
+        $('div.form-group.datepicker input').datepicker({
+            todayBtn: "linked",
+            language: "ru",
+            orientation: "top auto",
+            autoclose: true,
+            todayHighlight: true,
+            toggleActive: true});
     });
 
 </script>
