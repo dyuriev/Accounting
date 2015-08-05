@@ -181,30 +181,26 @@
                     <hr>
                     <form>
                         <div class="form-group">
-                            <label for="amount">Сумма</label>
-                            <input type="text" class="form-control" id="amount" name="amount" placeholder="100.00">
-                        </div>
-                        <div class="form-group">
                             <label for="profit-source">Источник дохода</label>
                             <select class="form-control" id="profit-source" name="profit-source">
+                                <option selected="selected" disabled="disabled">Выберите</option>
                                 <option>З/П EPAM</option>
                                 <option>З/П Пирамида</option>
                                 <option>З/П Налету</option>
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="amount">Сумма</label>
+                            <input type="text" class="form-control" id="amount" name="amount" placeholder="100.00">
+                        </div>
+                        <div class="form-group">
                             <label for="date-add">Дата поступления</label>
-                            <!--<input type="text" class="form-control" id="date-add" name="date-add" disabled="disabled" placeholder="01.01.2015">-->
+
                             <div class="input-group date">
                                 <input type="text" class="form-control" id="date-add" name="date-add"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                             </div>
                         </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"> Check me out
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
+                        <button type="submit" class="btn btn-info"><i class="fa fa-check"></i> Сохранить</button>
                     </form>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="addexpence" aria-labelledby="addexpence">
@@ -224,18 +220,6 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap-datepicker.js"></script>
 <script src="js/bootstrap-datepicker.ru.js"></script>
-<script>
-    $(function() {
-        $('div.form-group .input-group.date').datepicker({
-            todayBtn: "linked",
-            language: "ru",
-            orientation: "top auto",
-            autoclose: true,
-            todayHighlight: true,
-            toggleActive: true});
-    });
-
-</script>
 <script src="js/app.js"></script>
 </body>
 </html>
