@@ -1,44 +1,55 @@
 (function() {
 
-    function formatDate(date) {
-        var dateArr = [];
-        var day = date.getDate();
-        var month = date.getMonth() + 1;
-
-        if (day < 10) {
-            day = '0' + day;
+    var $profitAddItemForm = $('#profitAddForm');
+/*[!]*/var profitFormChecker = new DYURIEV.Checker.Checker.Checker($profitAddItemForm);
+    var appStorage = new DYURIEV.ObjectStorage.ObjectStorage('budget');
+    var profitCollection = [
+        {
+            id: 1,
+            timestamp: 123123123,
+            source: 'З/П EPAM',
+            amount: 39150,
+            date: '10.08.2015'
+        },
+        {
+            id: 2,
+            timestamp: 123123124,
+            source: 'З/П ПИРАМИДА',
+            amount: 10000,
+            date: '14.08.2015'
+        },
+        {
+            id: 3,
+            timestamp: 123123125,
+            source: 'З/П НАЛЕТУ',
+            amount: 7500,
+            date: '04.08.2015'
         }
+    ];
+    var $budgetTabs = $('#budgetTabs');
+    var profitTableTpl = $('#tpl-table-profits').html();
+    var $profitTableDiv = $('#table-profits-div');
+    var profitTableRender = _.template(profitTableTpl);
 
-        if (month < 10) {
-            month = '0' + month;
-        }
-
-        dateArr = [day.toString(), month.toString(), date.getFullYear()];
-
-        return dateArr.join('.');
+    function renderProfitsTable(collection) {
+        return profitTableRender({ collection: collection });
     }
 
-    function ObjectsStorage(storageName) {
-        this.storage = [];
-        this.storageName = storageName;
+    function renderAll() {
+        $profitTableDiv.html(renderProfitsTable(profitCollection));
     }
 
-    ObjectsStorage.prototype.set = function(key, value) {
-        this.storage[key] = value;
-        this.sync();
-    };
+    function getMaxID(collection) {
+        var max =  _.max(collection, function(item) {
+            return item.id;
+        });
 
-    ObjectsStorage.prototype.get = function(key) {
-        return this.storage[key];
-    };
-
-    ObjectsStorage.prototype.sync = function() {
-        var jsonData = JSON.stringify(this.storage);
-        localStorage.setItem(this.storageName, jsonData);
-    };
-
+        return (max && Number.isInteger(max.id)) ? max.id : 0;
+    }
 
     $(function() {
+        renderAll();
+
         $('div.form-group .input-group.date').datepicker({
             todayBtn: "linked",
             language: "ru",
@@ -48,14 +59,46 @@
             toggleActive: true
         });
 
-        $('#date-add').val(formatDate(new Date()));
+        $('#profit-date').val(DYURIEV.Helpers.formatDate(new Date()));
 
-        $('#profitAddForm').on('submit', function() {
+        $('#btnAddProfit').on('click', function() {
+            $budgetTabs.find('a[href="#addprofit"]').tab('show');
+        });
 
+        $profitAddItemForm.on('submit', function(e) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+
+            profitCollection.push({
+                id: getMaxID(profitCollection) + 1,
+                timestamp: new Date().getTime(),
+                source: $profitAddItemForm.find('[name="profit-source"]').val(),
+                amount: $profitAddItemForm.find('[name="profit-amount"]').val(),
+                date: $profitAddItemForm.find('[name="profit-date"]').val()
+            });
+
+            $profitAddItemForm.find('[name="profit-source"]').val('default');
+            $profitAddItemForm.find('[name="profit-amount"]').val('');
+            $profitAddItemForm.find('[name="profit-date"]').val(DYURIEV.Helpers.formatDate(new Date()));
+
+            appStorage.set('profits', profitCollection);
+            renderAll();
+            $budgetTabs.find('a[href="#profit"]').tab('show');
         });
     });
 
-    var storage1 = new ObjectsStorage('some');
-    storage1.set('asdasd', {a:2});
-    console.dir(storage1.get('asdasd'));
+
+
+
+    //profitStorage.restore();
+    //console.log(profitStorage.get('val1'));
+    //console.log(profitStorage.get('val2'));
+    //profitStorage.set('val1', '1');
+    //profitStorage.set('val2',2);
+    //console.log(profitStorage.get('val1'));
+    //console.log(profitStorage.get('val2'));
+
+    //profitStorage.delete('val1');
+    //console.log(profitStorage.get('val1'));
+    //profitStorage.set('val2', {a:1});
 }());

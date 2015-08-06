@@ -67,59 +67,13 @@
             </ul>
             <div id="budgetTabsContent" class="tab-content">
                 <div role="tabpanel" class="tab-pane fade active in" id="profit" aria-labelledby="profit-tab">
-                        <div class="pull-right">
-                            <button class="btn btn-success btn-add"><i class="fa fa-plus"></i> Добавить поступление</button>
-                        </div>
-                        <table class="table table-striped table-bordered table-list">
-                            <thead>
-                            <tr>
-                                <th>
-                                    Дата
-                                </th>
-                                <th>
-                                    Источник дохода
-                                </th>
-                                <th>
-                                    Сумма
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    9 августа
-                                </td>
-                                <td>
-                                    З/П EPAM
-                                </td>
-                                <td>
-                                    39 150,00 р.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1 августа
-                                </td>
-                                <td>
-                                    З/П Пирамида
-                                </td>
-                                <td>
-                                    100 000,00 р.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    31 июля
-                                </td>
-                                <td>
-                                    З/П Налету
-                                </td>
-                                <td>
-                                    7 500 р.
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="pull-right">
+                        <button class="btn btn-success btn-add" id="btnAddProfit"><i class="fa fa-plus"></i> Добавить поступление</button>
+                    </div>
+                    <div id="table-profits-div">
+                        <!-- Table of profits-->
+                    </div>
+
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="expense" aria-labelledby="expense-tab">
                     <div class="pull-right">
@@ -179,25 +133,24 @@
                 <div role="tabpanel" class="tab-pane fade" id="addprofit" aria-labelledby="addprofit">
                     <h3>Добавление дохода</h3>
                     <hr>
-                    <form name="profitAddForm" id="profitAddForm">
+                    <form id="profitAddForm" data-checker-validate="true" method="post" action="" enctype="application/x-www-form-urlencoded">
                         <div class="form-group">
-                            <label for="profit-source">Источник дохода</label>
-                            <select class="form-control" id="profit-source" name="profit-source">
-                                <option selected="selected" disabled="disabled">Выберите</option>
-                                <option>З/П EPAM</option>
-                                <option>З/П Пирамида</option>
-                                <option>З/П Налету</option>
+                            <label class="required-filed" for="profit-source">Источник дохода</label>
+                            <select class="form-control" id="profit-source" name="profit-source" data-checker-rules="required">
+                                <option selected="selected" disabled="disabled" value="default">Выберите</option>
+                                <option value="З/П EPAM">З/П EPAM</option>
+                                <option value="З/П Пирамида">З/П Пирамида</option>
+                                <option value="З/П Налету">З/П Налету</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="amount">Сумма</label>
-                            <input type="text" class="form-control" id="amount" name="amount" placeholder="100.00">
+                            <label class="required-filed" for="profit-amount">Сумма</label>
+                            <input type="text" class="form-control" id="profit-amount" name="profit-amount" placeholder="100.00" data-checker-rules="required,numeric">
                         </div>
                         <div class="form-group">
-                            <label for="date-add">Дата поступления</label>
-
+                            <label class="required-filed" for="profit-date">Дата поступления</label>
                             <div class="input-group date">
-                                <input type="text" class="form-control" id="date-add" name="date-add"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                <input type="text" class="form-control" id="profit-date" name="profit-date" data-checker-rules="required,rusdate"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-info btn-add-profit"><i class="fa fa-check"></i> Сохранить</button>
@@ -211,12 +164,48 @@
     </div>
     </div>
 </div><!-- /.container-fluid -->
+<!-- ######################### End of main layout ################################# -->
+
+<!-- ######################### HTML JS Templates ########################## -->
+<script type="text/html" id="tpl-table-profits">
+    <table class="table table-striped table-bordered table-list">
+    <thead>
+    <tr>
+        <th class="th-sorted-column th-id">Дата</th>
+        <th class="th-sorted-column">Источник дохода</th>
+        <th class="th-sorted-column">Сумма</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% _.each(collection, function(item) { %>
+    <tr>
+        <td><%- item.date %></td>
+        <td><%- item.source %></td>
+        <td><%- DYURIEV.Helpers.formatMoney(item.amount) %></td>
+    </tr>
+    <% }); %>
+    </tbody>
+    </table>
+</script>
+
+<script type="text/html" id="ul-errors-block">
+    <ul class="checker-error-list" style="display: block;">
+        <% _.each(fieldErrors, function(error) { %>
+        <li><%- error %></li>
+        <% }); %>
+    </ul>
+</script>
 
 <script src="js/jquery-1.11.3.min.js"></script>
 <script src="js/lodash.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap-datepicker.js"></script>
 <script src="js/bootstrap-datepicker.ru.js"></script>
+
+<script src="js/libs/DYURIEV/init.js"></script>
+<script src="js/libs/DYURIEV/Helpers/helpers.js"></script>
+<script src="js/libs/DYURIEV/Checker/checker.js"></script>
+<script src="js/libs/DYURIEV/ObjectStorage/objectstorage.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
