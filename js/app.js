@@ -2,6 +2,9 @@
 
     var $profitAddItemForm = $('#profitAddForm');
     var $expenseAddItemForm = $('#expenseAddForm');
+    var $expensesTable = $('#expensesTable');
+
+
 /*[!]*/var profitFormChecker = new DYURIEV.Checker.Checker.Checker($profitAddItemForm);
 /*[!]*/var expenseFormChecker = new DYURIEV.Checker.Checker.Checker($expenseAddItemForm);
     //console.log(expenseFormChecker);
@@ -49,6 +52,11 @@
         return expenseTableRender({ collection: collection });
     }
 
+    function changeSortIcons($table, sortType, sortOrder) {
+        var $column = $table.find('th[data-sort-type="' + sortType + '"]');
+        $column.addClass('th-sorted-' + sortOrder);
+    }
+
     function renderAll() {
         $profitTableDiv.html(renderProfitsTable(profitCollection));
         $expenseTableDiv.html(renderExpensesTable(expenseCollection));
@@ -67,6 +75,9 @@
         profitCollection = _profitCollection || [];
         var _expenseCollection = appStorage.get('expenses');
         expenseCollection = _expenseCollection || [];
+        var $tableProfitsDiv = $('#table-profits-div');
+        var $tableExpensesDiv = $('#table-expenses-div');
+        var sortOrder = 'asc';
         renderAll();
 
         $('div.form-group .input-group.date').datepicker({
@@ -76,6 +87,46 @@
             autoclose: true,
             todayHighlight: true,
             toggleActive: true
+        });
+
+        $profitTableDiv.on('click', '.active-table .th-sorted-column', function() {
+            var sortType = $(this).attr('data-sort-type');
+            sortOrder = sortOrder == 'asc' ? 'desc' : 'asc';
+            profitCollection = _.sortByOrder(profitCollection, [sortType], [sortOrder]);
+            renderAll();
+
+            var $profitsTable = $profitTableDiv.find('.active-table');
+            changeSortIcons($profitsTable, sortType, sortOrder);
+        });
+
+        $tableProfitsDiv.on('click', 'button.btn-edit-item', function(e) {
+            console.log($(this).attr('data-item-id'));
+        });
+
+        $tableProfitsDiv.on('click', 'button.btn-delete-item', function(e) {
+            var itemID = $(this).attr('data-item-id');
+
+            if (confirm('Действительно удалить?')) {
+                profitCollection = _.filter(profitCollection,  function(item) {
+                    return item.id != itemID;
+                });
+
+                appStorage.set('profits', profitCollection);
+                renderAll();
+            }
+        });
+
+        $tableExpensesDiv.on('click', 'button.btn-delete-item', function(e) {
+            var itemID = $(this).attr('data-item-id');
+
+            if (confirm('Действительно удалить?')) {
+                expenseCollection = _.filter(expenseCollection,  function(item) {
+                    return item.id != itemID;
+                });
+
+                appStorage.set('expenses', expenseCollection);
+                renderAll();
+            }
         });
 
         $('#profit-date').val(DYURIEV.Helpers.formatDate(new Date()));

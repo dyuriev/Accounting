@@ -78,3 +78,30 @@ body {
 .full-width {
     width: 100%;
 }
+
+.td-hidden-portrait {
+    display: none;
+}
+
+.active-table th {
+    cursor: pointer;
+    position: relative;
+}
+
+.th-sorted-asc:after {
+    content: url('../img/sort_ascending.png');
+    position: absolute;
+    right: 5px;
+}
+
+.th-sorted-desc:after {
+    content: url('../img/sort_descending.png');
+    position: absolute;
+    right: 5px;
+}
+
+@media screen and (min-width: 568px) {
+    .td-hidden-portrait {
+        display: table-cell;
+    }
+}
