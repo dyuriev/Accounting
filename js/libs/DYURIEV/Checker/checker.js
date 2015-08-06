@@ -56,10 +56,6 @@ DYURIEV.Checker.Validators = (function(){
 }());
 
 DYURIEV.Checker.Checker = (function() {
-    var checkedItems = [];
-    var $validatingForm;
-    var $validatingFields;
-    var invalidFields = [];
     var ulErrorsBlockTpl = $('#ul-errors-block').html();
     var ulErrorBlockRender = _.template(ulErrorsBlockTpl);
 
@@ -67,25 +63,29 @@ DYURIEV.Checker.Checker = (function() {
     var messages = DYURIEV.Checker.Validators.messages;
 
     function Checker($form) {
-        this.init($form)
+        this.checkedItems = [];
+        this.$validatingForm = null;
+        this.$validatingFields = null;
+        this.invalidFields = [];
+        this.init($form);
     }
 
     Checker.prototype.init = function($form) {
         if ($form.attr('data-checker-validate')) {
-            $validatingForm = $form;
-            $validatingFields = $validatingForm.find('[data-checker-rules]');
+            this.$validatingForm = $form;
+            this.$validatingFields = this.$validatingForm.find('[data-checker-rules]');
 
             var that = this;
-            if (_.isObject($validatingFields) && $validatingFields.length > 0) {
-                _.forEach($validatingFields, function (item, i) {
-                    checkedItems.push({
+            if (_.isObject(this.$validatingFields) && this.$validatingFields.length > 0) {
+                _.forEach(this.$validatingFields, function (item, i) {
+                    that.checkedItems.push({
                         field: item,
                         rules: that.getFieldRules(item),
                         errors: []
                     });
                 });
 
-                this.handleEvents($validatingForm, $validatingFields);
+                this.handleEvents(this.$validatingForm, this.$validatingFields);
             }
         }
     };
@@ -101,7 +101,7 @@ DYURIEV.Checker.Checker = (function() {
             var hasValidationErrors = that.validateAllFields();
 
             if (hasValidationErrors) {
-                var $firstField = $(invalidFields[0]);
+                var $firstField = $(that.invalidFields[0]);
                 $firstField.focus();
                 e.preventDefault();
                 e.stopImmediatePropagation();
@@ -149,7 +149,7 @@ DYURIEV.Checker.Checker = (function() {
         var errorMessages = [];
         var that = this;
 
-        _.forEach(checkedItems, function(item, i) {
+        _.forEach(this.checkedItems, function(item, i) {
 
             if (item.field == field) {
                 var $field = $(field);
@@ -172,7 +172,7 @@ DYURIEV.Checker.Checker = (function() {
         var fieldValue = $(field).val();
         var hasError = false;
 
-        _.forEach(checkedItems, function(item, i) {
+        _.forEach(this.checkedItems, function(item, i) {
 
             if (item.field == field) {
                 item.errors = [];
@@ -214,11 +214,11 @@ DYURIEV.Checker.Checker = (function() {
         var that = this;
         var hasErrors = false;
 
-        invalidFields = [];
+        this.invalidFields = [];
 
-        _.forEach(checkedItems, function (item, i) {
+        _.forEach(this.checkedItems, function (item, i) {
             if (that.validateField(item.field)) {
-                invalidFields.push(item.field);
+                that.invalidFields.push(item.field);
                 hasErrors = true;
             }
         });
@@ -227,7 +227,7 @@ DYURIEV.Checker.Checker = (function() {
     };
 
     Checker.prototype.getItems = function() {
-        return checkedItems;
+        return this.checkedItems;
     };
 
     return {

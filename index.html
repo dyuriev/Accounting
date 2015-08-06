@@ -61,10 +61,11 @@
                     <a href="#" id="budgetTabsDrop" class="dropdown-toggle" data-toggle="dropdown" aria-controls="budgetTabsDropContents" aria-expanded="false">Добавить <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="budgetTabsDropContents">
                         <li class=""><a href="#addprofit" role="tab" id="addprofit-tab" data-toggle="tab" aria-controls="addprofit" aria-expanded="false">+ доход</a></li>
-                        <li><a href="#addexpence" role="tab" id="addexpence-tab" data-toggle="tab" aria-controls="addexpence" aria-expanded="false">- расход</a></li>
+                        <li><a href="#addexpense" role="tab" id="addexpense-tab" data-toggle="tab" aria-controls="addexpense" aria-expanded="false">- расход</a></li>
                     </ul>
                 </li>
             </ul>
+
             <div id="budgetTabsContent" class="tab-content">
                 <div role="tabpanel" class="tab-pane fade active in" id="profit" aria-labelledby="profit-tab">
                     <div class="pull-right">
@@ -73,62 +74,14 @@
                     <div id="table-profits-div">
                         <!-- Table of profits-->
                     </div>
-
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="expense" aria-labelledby="expense-tab">
                     <div class="pull-right">
-                        <button class="btn btn-danger btn-add"><i class="fa fa-minus"></i> Добавить расход</button>
+                        <button class="btn btn-danger btn-add" id="btnAddExpense"><i class="fa fa-minus"></i> Добавить расход</button>
                     </div>
-                    <table class="table table-striped table-bordered table-list">
-                        <thead>
-                        <tr>
-                            <th>
-                                Дата
-                            </th>
-                            <th>
-                                Статья расходов
-                            </th>
-                            <th>
-                                Сумма
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                9 августа
-                            </td>
-                            <td>
-                                Бензин
-                            </td>
-                            <td>
-                                700.00р.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                1 августа
-                            </td>
-                            <td>
-                                Сигареты
-                            </td>
-                            <td>
-                                147.22р.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                31 июля
-                            </td>
-                            <td>
-                                Обед на работе
-                            </td>
-                            <td>
-                                225.68р.
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div id="table-expenses-div">
+                        <!-- Table of expenses-->
+                    </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="addprofit" aria-labelledby="addprofit">
                     <h3>Добавление дохода</h3>
@@ -153,11 +106,42 @@
                                 <input type="text" class="form-control" id="profit-date" name="profit-date" data-checker-rules="required,rusdate"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="profit-comment">Комментарий</label>
+                            <textarea name="profit-comment" id="profit-comment" class="full-width"></textarea>
+                        </div>
                         <button type="submit" class="btn btn-info btn-add-profit"><i class="fa fa-check"></i> Сохранить</button>
                     </form>
                 </div>
-                <div role="tabpanel" class="tab-pane fade" id="addexpence" aria-labelledby="addexpence">
-                    vbnvbn
+                <div role="tabpanel" class="tab-pane fade" id="addexpense" aria-labelledby="addexpense">
+                    <h3>Добавление расхода</h3>
+                    <hr>
+                    <form id="expenseAddForm" data-checker-validate="true" method="post" action="" enctype="application/x-www-form-urlencoded">
+                        <div class="form-group">
+                            <label class="required-filed" for="expense-source">Статья расходов</label>
+                            <select class="form-control" id="expense-source" name="expense-source" data-checker-rules="required">
+                                <option selected="selected" disabled="disabled" value="default">Выберите</option>
+                                <option value="Бензин">Бензин</option>
+                                <option value="Сигареты">Сигареты</option>
+                                <option value="Еда в офисе">Еда в офисе</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="required-filed" for="expense-amount">Сумма</label>
+                            <input type="text" class="form-control" id="expense-amount" name="expense-amount" placeholder="100.00" data-checker-rules="required,numeric">
+                        </div>
+                        <div class="form-group">
+                            <label class="required-filed" for="expense-date">Дата расходования</label>
+                            <div class="input-group date">
+                                <input type="text" class="form-control" id="expense-date" name="expense-date" data-checker-rules="required,rusdate"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="expense-comment">Комментарий</label>
+                            <textarea name="expense-comment" id="expense-comment" class="full-width"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-info btn-add-expense"><i class="fa fa-check"></i> Сохранить</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -177,14 +161,47 @@
     </tr>
     </thead>
     <tbody>
-    <% _.each(collection, function(item) { %>
-    <tr>
-        <td><%- item.date %></td>
-        <td><%- item.source %></td>
-        <td><%- DYURIEV.Helpers.formatMoney(item.amount) %></td>
-    </tr>
-    <% }); %>
+    <% if (collection && collection.length > 0) { %>
+        <% _.each(collection, function(item) { %>
+        <tr>
+            <td><%- item.date %></td>
+            <td><%- item.source %></td>
+            <td><%- DYURIEV.Helpers.formatMoney(item.amount) %></td>
+        </tr>
+        <% }); %>
+    <% } else { %>
+        <tr>
+            <td colspan="3">Нет записей для отображения</td>
+        </tr>
+    <% } %>
     </tbody>
+    </table>
+</script>
+
+<script type="text/html" id="tpl-table-expenses">
+    <table class="table table-striped table-bordered table-list">
+        <thead>
+        <tr>
+            <th class="th-sorted-column th-id">Дата</th>
+            <th class="th-sorted-column">Статья расходов</th>
+            <th class="th-sorted-column">Сумма</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if (collection && collection.length > 0) { %>
+        <% _.each(collection, function(item) { %>
+        <tr>
+            <td><%- item.date %></td>
+            <td><%- item.source %></td>
+            <td><%- DYURIEV.Helpers.formatMoney(item.amount) %></td>
+        </tr>
+        <% }); %>
+        <% } else { %>
+        <tr>
+            <td colspan="3">Нет записей для отображения</td>
+        </tr>
+        <% } %>
+        </tbody>
     </table>
 </script>
 
