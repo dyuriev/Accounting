@@ -49,6 +49,10 @@
         });
 
         $('#date-add').val(formatDate(new Date()));
+
+        $('#profitAddForm').on('submit', function() {
+
+        });
     });
 
     var storage1 = new ObjectsStorage('some');
