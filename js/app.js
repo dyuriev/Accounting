@@ -62,14 +62,6 @@
         $expenseTableDiv.html(renderExpensesTable(expenseCollection));
     }
 
-    function getMaxID(collection) {
-        var max =  _.max(collection, function(item) {
-            return item.id;
-        });
-
-        return (max && Number.isInteger(max.id)) ? max.id : 0;
-    }
-
     $(function() {
         var _profitCollection = appStorage.get('profits');
         profitCollection = _profitCollection || [];
@@ -97,6 +89,16 @@
 
             var $profitsTable = $profitTableDiv.find('.active-table');
             changeSortIcons($profitsTable, sortType, sortOrder);
+        });
+
+        $expenseTableDiv.on('click', '.active-table .th-sorted-column', function() {
+            var sortType = $(this).attr('data-sort-type');
+            sortOrder = sortOrder == 'asc' ? 'desc' : 'asc';
+            expenseCollection = _.sortByOrder(expenseCollection, [sortType], [sortOrder]);
+            renderAll();
+
+            var $expenseTable = $expenseTableDiv.find('.active-table');
+            changeSortIcons($expenseTable, sortType, sortOrder);
         });
 
         $tableProfitsDiv.on('click', 'button.btn-edit-item', function(e) {
@@ -145,11 +147,10 @@
             e.preventDefault();
 
             profitCollection.push({
-                id: getMaxID(profitCollection) + 1,
-                timestamp: new Date().getTime(),
+                id: new Date().getTime(),
                 source: $profitAddItemForm.find('[name="profit-source"]').val(),
-                amount: $profitAddItemForm.find('[name="profit-amount"]').val(),
-                date: $profitAddItemForm.find('[name="profit-date"]').val(),
+                amount: parseFloat($profitAddItemForm.find('[name="profit-amount"]').val()),
+                date: DYURIEV.Helpers.parseDate($profitAddItemForm.find('[name="profit-date"]').val()),
                 comment: $expenseAddItemForm.find('[name="profit-comment"]').val()
             });
 
@@ -168,11 +169,10 @@
             e.preventDefault();
 
             expenseCollection.push({
-                id: getMaxID(expenseCollection) + 1,
-                timestamp: new Date().getTime(),
-                source: $expenseAddItemForm.find('[name="expense-source"]').val(),
-                amount: $expenseAddItemForm.find('[name="expense-amount"]').val(),
-                date: $expenseAddItemForm.find('[name="expense-date"]').val(),
+                id: new Date().getTime(),
+                target: $expenseAddItemForm.find('[name="expense-source"]').val(),
+                amount: parseFloat($expenseAddItemForm.find('[name="expense-amount"]').val()),
+                date: DYURIEV.Helpers.parseDate($expenseAddItemForm.find('[name="expense-date"]').val()),
                 comment: $expenseAddItemForm.find('[name="expense-comment"]').val()
             });
 

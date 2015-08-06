@@ -155,7 +155,7 @@
     <table class="table table-striped table-bordered table-list active-table" id="profitsTable">
     <thead>
     <tr>
-        <th class="th-sorted-column th-id" data-sort-type="id">Дата</th>
+        <th class="th-sorted-column th-id" data-sort-type="date">Дата</th>
         <th class="th-sorted-column" data-sort-type="source">Источник</th>
         <th class="th-sorted-column" data-sort-type="amount">Сумма</th>
         <th class="td-hidden-portrait">Действия</th>
@@ -165,7 +165,7 @@
     <% if (collection && collection.length > 0) { %>
         <% _.each(collection, function(item) { %>
         <tr>
-            <td><%- item.date %></td>
+            <td><%- DYURIEV.Helpers.formatDate(new Date(item.date)) %></td>
             <td><%- item.source %></td>
             <td><%- DYURIEV.Helpers.formatMoney(item.amount) %></td>
             <td class="td-hidden-portrait">
@@ -187,8 +187,8 @@
     <table class="table table-striped table-bordered table-list active-table" id="expensesTable">
         <thead>
         <tr>
-            <th class="th-sorted-column th-id" data-sort-type="id">Дата</th>
-            <th class="th-sorted-column" data-sort-type="source">Цель</th>
+            <th class="th-sorted-column th-id" data-sort-type="date">Дата</th>
+            <th class="th-sorted-column" data-sort-type="target">Цель</th>
             <th class="th-sorted-column" data-sort-type="amount">Сумма</th>
             <th class="td-hidden-portrait">Действия</th>
         </tr>
@@ -197,8 +197,8 @@
         <% if (collection && collection.length > 0) { %>
         <% _.each(collection, function(item) { %>
         <tr>
-            <td><%- item.date %></td>
-            <td><%- item.source %></td>
+            <td><%- DYURIEV.Helpers.formatDate(new Date(item.date)) %></td>
+            <td><%- item.target %></td>
             <td><%- DYURIEV.Helpers.formatMoney(item.amount) %></td>
             <td class="td-hidden-portrait">
                 <button class="btn btn-default btn-xs btn-info btn-edit-item" data-item-id="<%- item.id %>"><i class="fa fa-edit"></i></button>

@@ -11,7 +11,8 @@ DYURIEV.Helpers = (function () {
         toJSON: toJSON,
         toObject: toObject,
         formatMoney: formatMoney,
-        formatDate: formatDate
+        formatDate: formatDate,
+        parseDate: parseDate
     };
 
     /**
@@ -70,5 +71,14 @@ DYURIEV.Helpers = (function () {
         var dateArr = [day.toString(), month.toString(), date.getFullYear()];
 
         return dateArr.join('.');
+    }
+
+    function parseDate(dateString) {
+        var dateArr = dateString.split('.');
+        var day = parseInt(dateArr[0]);
+        var month = parseInt(dateArr[1]) - 1;
+        var year = parseInt(dateArr[2]);
+
+        return new Date(year, month, day);
     }
 }());
