@@ -67,8 +67,8 @@
                 <li role="presentation" class="dropdown">
                     <a href="#" id="budgetTabsDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="budgetTabsDropContents1" aria-expanded="false">Справочники <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="myTabDrop2" id="budgetTabsDropContents1">
-                        <li><a href="#addprofitsource" role="tab" id="addprofitsource-tab" data-toggle="tab" aria-controls="addprofitsource" aria-expanded="false">+ источник дохода</a></li>
-                        <li><a href="#addexpensetarget" role="tab" id="addexpensetarget-tab" data-toggle="tab" aria-controls="addexpensetarget" aria-expanded="false">+ цель расхода</a></li>
+                        <li><a href="#profitsources" role="tab" id="profitsources-tab" data-toggle="tab" aria-controls="profitsources" aria-expanded="false">Источники дохода</a></li>
+                        <li><a href="#expensetargets" role="tab" id="expensetargets-tab" data-toggle="tab" aria-controls="expensetargets" aria-expanded="false">Цели расходов</a></li>
                     </ul>
                 </li>
             </ul>
@@ -146,6 +146,14 @@
                         <button class="btn btn-default btn-sm btn-return-expense"><i class="fa fa-reply"></i> Вернуться</button>
                     </form>
                 </div>
+                <div role="tabpanel" class="tab-pane fade" id="profitsources" aria-labelledby="profitsources">
+                    <div class="pull-right">
+                        <button class="btn btn-success btn-sm btn-add" id="btnAddProfitSource"><i class="fa fa-plus"></i> Добавить источник доходов</button>
+                    </div>
+                    <div id="table-profitsources-div">
+                        <!-- Table of profit`s sources -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -213,6 +221,38 @@
         <tr>
             <td colspan="4">Нет записей для отображения</td>
         </tr>
+        <% } %>
+        </tbody>
+    </table>
+</script>
+<!-- закончил на этой таблице. Нужно перебите все значения по умолчанию и завести в коде -->
+<script type="text/html" id="tpl-table-profit-sources">
+    <table class="table table-striped table-bordered table-list active-table" id="profitSourcesTable">
+        <thead>
+        <tr>
+            <th class="th-sorted-column" data-sort-type="timestamp">Дата добавления</th>
+            <th class="th-sorted-column" data-sort-type="target">Источник дохода</th>
+            <th class="th-sorted-column" data-sort-type="amount">Сумма по умолчанию</th>
+            <th class="td-hidden-portrait">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if (collection && collection.length > 0) { %>
+            <% _.each(collection, function(item) { %>
+                <tr>
+                    <td><%- DYURIEV.Helpers.formatDate(new Date(item.date)) %></td>
+                    <td><%- item.name %></td>
+                    <td><%- DYURIEV.Helpers.formatMoney(item.amount) %></td>
+                    <td class="td-hidden-portrait">
+                        <button class="btn btn-default btn-xs btn-info btn-edit-item" data-item-id="<%- item.id %>"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-default btn-xs btn-danger btn-delete-item" data-item-id="<%- item.id %>"><i class="fa fa-remove"></i></button>
+                    </td>
+                </tr>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="4">Нет записей для отображения</td>
+            </tr>
         <% } %>
         </tbody>
     </table>
