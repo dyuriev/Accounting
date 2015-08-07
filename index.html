@@ -16,7 +16,7 @@
 
 <body>
 <div class="container-fluid">
-    <div class="row">
+    <div class="row mainrow">
     <div class="col-xs-12">
     <div class="row">
         <nav class="navbar navbar-default navbar-inverse">
@@ -57,11 +57,18 @@
             <ul id="budgetTabs" class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#profit" id="profit-tab" role="tab" data-toggle="tab" aria-controls="profit" aria-expanded="true">Доходы</a></li>
                 <li role="presentation" class=""><a href="#expense" role="tab" id="expense-tab" data-toggle="tab" aria-controls="expense" aria-expanded="false">Расходы</a></li>
-                <li role="presentation" class="dropdown">
+                <li role="presentation" class="dropdown" style="display: none;">
                     <a href="#" id="budgetTabsDrop" class="dropdown-toggle" data-toggle="dropdown" aria-controls="budgetTabsDropContents" aria-expanded="false">Добавить <span class="caret"></span></a>
                     <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="budgetTabsDropContents">
                         <li class=""><a href="#addprofit" role="tab" id="addprofit-tab" data-toggle="tab" aria-controls="addprofit" aria-expanded="false">+ доход</a></li>
                         <li><a href="#addexpense" role="tab" id="addexpense-tab" data-toggle="tab" aria-controls="addexpense" aria-expanded="false">- расход</a></li>
+                    </ul>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a href="#" id="budgetTabsDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="budgetTabsDropContents1" aria-expanded="false">Справочники <span class="caret"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="myTabDrop2" id="budgetTabsDropContents1">
+                        <li><a href="#addprofitsource" role="tab" id="addprofitsource-tab" data-toggle="tab" aria-controls="addprofitsource" aria-expanded="false">+ источник дохода</a></li>
+                        <li><a href="#addexpensetarget" role="tab" id="addexpensetarget-tab" data-toggle="tab" aria-controls="addexpensetarget" aria-expanded="false">+ цель расхода</a></li>
                     </ul>
                 </li>
             </ul>

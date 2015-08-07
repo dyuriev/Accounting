@@ -1,9 +1,18 @@
 body {
     font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+}
+
+.dropdown-menu {
+    font-size: 12px;
 }
 
 .table-list {
     margin-top: 10px;
+}
+
+.mainrow {
+    padding: 0 5px;
 }
 
 .well-budget {
