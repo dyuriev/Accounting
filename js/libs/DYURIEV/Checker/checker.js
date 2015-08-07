@@ -63,6 +63,10 @@ DYURIEV.Checker.Checker = (function() {
     var messages = DYURIEV.Checker.Validators.messages;
 
     function Checker($form) {
+        if (!(this instanceof Checker)) {
+            return new Checker($form);
+        }
+
         this.checkedItems = [];
         this.$validatingForm = null;
         this.$validatingFields = null;
