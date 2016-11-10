@@ -1,0 +1,25 @@
+{
+  "name": "accounting",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyuriev/Accounting.git"
+  },
+  "author": "Dmitrii Iurev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dyuriev/Accounting/issues"
+  },
+  "homepage": "https://github.com/dyuriev/Accounting#readme",
+  "dependencies": {
+    "cd": "^0.3.3",
+    "express": "^4.14.0",
+    "getweather": "file:///Users/admin/Desktop/WeatherApp"
+  }
+}

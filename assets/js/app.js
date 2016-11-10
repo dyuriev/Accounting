@@ -78,12 +78,39 @@
         $column.addClass('th-sorted-' + sortOrder);
     }
 
+    function renderTemplate(templateName, templateData) {
+        if (!renderTemplate.templateCache ) {
+            renderTemplate.templateCache = {};
+        }
+
+        if (!renderTemplate.templateCache[templateName] ) {
+            var templateDir = '/templates',
+                templateUrl = templateDir + '/' + templateName + '.html',
+                templateString = '';
+
+            $.ajax({
+                url: templateUrl,
+                method: 'GET',
+                dataType: 'html',
+                async: false,
+                success: function(data) {
+                    templateString = data;
+                }
+            });
+
+            renderTemplate.templateCache[templateName] = _.template(templateString);
+        }
+
+        return renderTemplate.templateCache[templateName](templateData);
+    }
+
     function renderAll() {
         $profitTableDiv.html(renderProfitsTable(profitCollection));
-        $expenseTableDiv.html(renderExpensesTable(expenseCollection));
+        $expenseTableDiv.html(renderTemplate('expense', {collection: expenseCollection}));
         $profitSourcesSelect.html(renderProfitSources(profitSourceCollection));
         $expenseTargetsSelect.html(renderExpenseTargets(expenseTargetCollection));
     }
+
 
     $(function() {
         var _profitCollection = appStorage.get('profits');

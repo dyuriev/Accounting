@@ -1,0 +1,29 @@
+<table class="table table-striped table-bordered table-list active-table" id="expensesTable">
+    <thead>
+    <tr>
+        <th class="th-sorted-column th-id" data-sort-type="timestamp">Дата</th>
+        <th class="th-sorted-column" data-sort-type="target">Цель</th>
+        <th class="th-sorted-column" data-sort-type="amount">Сумма</th>
+        <th class="td-hidden-portrait">Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if (collection && collection.length > 0) { %>
+    <% _.each(collection, function(item) { %>
+    <tr>
+        <td><%- DYURIEV.Helpers.formatDate(new Date(item.date)) %></td>
+        <td><%- item.target %></td>
+        <td><%- DYURIEV.Helpers.formatMoney(item.amount) %></td>
+        <td class="td-hidden-portrait">
+            <button class="btn btn-default btn-xs btn-info btn-edit-item" data-item-id="<%- item.id %>"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-default btn-xs btn-danger btn-delete-item" data-item-id="<%- item.id %>"><i class="fa fa-remove"></i></button>
+        </td>
+    </tr>
+    <% }); %>
+    <% } else { %>
+    <tr>
+        <td colspan="4">Нет записей для отображения</td>
+    </tr>
+    <% } %>
+    </tbody>
+</table>
